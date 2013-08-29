@@ -33,14 +33,16 @@ window.rekwire = function (name, path) {
   module.loading = true;
   module.dfd = $.Deferred();
 
-  $.getScript(module.path)
-    .done(function () {
-      module.loaded = true;
-      return module.dfd.resolve(arguments);
-    })
-    .fail(function () {
-      return module.dfd.reject(arguments);
-    });
+  $.ajax({
+    url: module.path,
+    dataType: 'script',
+    cache: true
+  })
+  .done(function () {
+    module.loaded = true;
+    module.dfd.resolve(arguments);
+  })
+  .fail(module.dfd.reject);
 
   return module.dfd.promise();
 };
