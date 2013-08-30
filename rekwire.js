@@ -23,7 +23,7 @@ window.rekwire = function (name, path) {
   }
 
   if (module.loaded) {
-    return dfd.resolve();
+    return module.dfd.resolve();
   }
 
   if (module.loading) {
