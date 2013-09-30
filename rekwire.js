@@ -1,9 +1,3 @@
-/*
- * rekwire
- * Josh Everett
- * MIT License
-*/
-
 window._rekwire = { base: '' };
 
 window.rekwire = function (name, path) {

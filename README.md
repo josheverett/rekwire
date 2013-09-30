@@ -1,4 +1,3 @@
-rekwire
-=======
+# rekwire
 
 Micro jquery module loader.
