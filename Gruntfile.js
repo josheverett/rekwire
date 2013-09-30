@@ -18,15 +18,55 @@ module.exports = function (grunt) {
       }
     },
 
+    copy: {
+      build: {
+        files: [
+          { src: 'rekwire.js',
+            dest: 'test/rekwire.js' },
+          { src: 'node_modules/qunitjs/qunit/qunit.css',
+            dest: 'test/qunit/qunit.css' },
+          { src: 'node_modules/qunitjs/qunit/qunit.js',
+            dest: 'test/qunit/qunit.js' }
+        ]
+      }
+    },
+
+    connect: {
+      build: {
+        options: {
+          port: 8000,
+          base: 'test/'
+        }
+      }
+    },
+
+    qunit: {
+      build: {
+        options: {
+          urls: ['http://localhost:8000']
+        }
+      }
+    },
+
     watch: {
       files: 'rekwire.js',
-      tasks: ['jshint', 'uglify']
+      tasks: ['jshint', 'uglify', 'copy', 'qunit']
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['jshint', 'uglify', 'watch']);
+  grunt.registerTask('default', [
+    'jshint',
+    'uglify',
+    'copy',
+    'connect',
+    'qunit',
+    'watch'
+  ]);
 };
