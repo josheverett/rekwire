@@ -49,8 +49,14 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      files: 'rekwire.js',
-      tasks: ['jshint', 'uglify', 'copy', 'qunit']
+      build: {
+        files: 'rekwire.js',
+        tasks: ['jshint', 'uglify', 'copy', 'qunit']
+      },
+      debug: {
+        files: 'rekwire.js',
+        tasks: ['jshint', 'uglify', 'copy']
+      }
     }
   });
 
@@ -62,11 +68,13 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', [
-    'jshint',
-    'uglify',
-    'copy',
-    'connect',
-    'qunit',
-    'watch'
+    'jshint:build',
+    'uglify:build',
+    'copy:build',
+    'connect:build',
+    'qunit:build',
+    'watch:build'
   ]);
+
+  grunt.registerTask('debug', ['connect:build', 'watch:debug']);
 };
