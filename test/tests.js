@@ -108,7 +108,7 @@ asyncTest('Modules are only loaded once.', function () {
   rekwire('count-loads');
 });
 
-asyncTest('Simple dependency tree loads in order.', function () {
+asyncTest('Simple dependency tree loads OK.', function () {
   expect(1);
 
   rekwire('D').done(function () {
@@ -117,7 +117,7 @@ asyncTest('Simple dependency tree loads in order.', function () {
   });
 });
 
-asyncTest('Complex dependency tree loads in order.', function () {
+asyncTest('Complex dependency tree loads OK.', function () {
   expect(1);
 
   rekwire('Z').done(function () {

@@ -1,7 +1,8 @@
 window._rekwire = { base: '' };
 
 window.rekwire = function (name, path, dependencies) {
-  var module;
+  var depsLoaded = $.Deferred().resolve(),
+      module;
 
   // rekwire([module1, module2, ...moduleN])
   if ($.isArray(name)) {
@@ -48,16 +49,22 @@ window.rekwire = function (name, path, dependencies) {
   module.loading = true;
   module.dfd = $.Deferred();
 
-  $.ajax({
-    url: module.path,
-    dataType: 'script',
-    cache: true
-  })
-  .done(function () {
-    module.loaded = true;
-    module.dfd.resolve(arguments);
-  })
-  .fail(module.dfd.reject);
+  if (module.dependencies.length) {
+    depsLoaded = rekwire(module.dependencies);
+  }
+
+  depsLoaded.done(function () {
+    $.ajax({
+      url: module.path,
+      dataType: 'script',
+      cache: true
+    })
+    .done(function () {
+      module.loaded = true;
+      module.dfd.resolve(arguments);
+    })
+    .fail(module.dfd.reject);
+  });
 
   return module.dfd.promise();
 };

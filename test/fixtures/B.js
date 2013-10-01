@@ -1,3 +1,1 @@
 function B () {}
-
-new A();
