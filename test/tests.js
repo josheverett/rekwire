@@ -5,7 +5,7 @@ _rekwire.base = 'fixtures/';
 rekwire('derp');
 rekwire('foo');
 
-rekwire('addthis', '//s7.addthis.com/js/250/addthis_widget.js#domready=1&async=1');
+rekwire('underscore', '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js');
 
 rekwire('count-loads');
 
@@ -39,25 +39,33 @@ test('Arguments test: rekwire(name, path, dependencies)', function () {
   deepEqual(_rekwire.c.dependencies, ['a', 'b'], 'Dependencies are correct.');
 });
 
-test('Arguments test: rekwire({ ... })', function () {
-  rekwire({
-    name: 'd',
-    path: '/foo/bar/d.js',
-    dependencies: ['a', 'b', 'c']
-  });
+test('Arguments test: rekwire(name, dependencies)', function () {
+  rekwire('d', ['a', 'b', 'c']);
 
   equal(typeof _rekwire.d, 'object', 'Module object created.');
-  equal(_rekwire.d.path, '/foo/bar/d.js', 'Path is correct.');
+  equal(_rekwire.d.path, _rekwire.base + 'd.js', 'Path is correct.');
   deepEqual(_rekwire.d.dependencies, ['a', 'b', 'c'],
       'Dependencies are correct.');
 });
 
-asyncTest('Loading same origin scripts.', function () {
-  expect(2);
+test('Arguments test: rekwire({ ... })', function () {
+  rekwire({
+    name: 'e',
+    path: '/foo/bar/e.js',
+    dependencies: ['a', 'b', 'c', 'd']
+  });
 
-  $.when(rekwire('derp'), rekwire('foo')).done(function () {
+  equal(typeof _rekwire.e, 'object', 'Module object created.');
+  equal(_rekwire.e.path, '/foo/bar/e.js', 'Path is correct.');
+  deepEqual(_rekwire.e.dependencies, ['a', 'b', 'c', 'd'],
+      'Dependencies are correct.');
+});
+
+asyncTest('Loading same origin script.', function () {
+  expect(1);
+
+  rekwire('derp').done(function () {
     equal(derp, 'derp', 'Module "derp" loaded.');
-    equal(foo, 'foo', 'Module "foo" loaded.');
     start();
   });
 });
@@ -65,8 +73,18 @@ asyncTest('Loading same origin scripts.', function () {
 asyncTest('Loading external script.', function () {
   expect(1);
 
-  rekwire('addthis').done(function () {
-    ok(!!addthis, 'External module "addthis" loaded.');
+  rekwire('underscore').done(function () {
+    equal(typeof _, 'function', 'External module "underscore" loaded.');
+    start();
+  });
+});
+
+asyncTest('rekwire([module1, module2, ...moduleN])', function () {
+  expect(2);
+
+  rekwire(['derp', 'foo']).done(function () {
+    equal(derp, 'derp', 'Module "derp" loaded.');
+    equal(foo, 'foo', 'Module "foo" loaded.');
     start();
   });
 });
@@ -88,15 +106,6 @@ asyncTest('Modules are only loaded once.', function () {
   rekwire('count-loads');
   rekwire('count-loads');
   rekwire('count-loads');
-});
-
-asyncTest('Rekwired scripts load in order.', function () {
-  expect(1);
-
-  rekwire(['A', 'B', 'C']).done(function () {
-    ok(true, 'Error will be thrown if this test fails.');
-    start();
-  });
 });
 
 asyncTest('Simple dependency tree loads in order.', function () {
