@@ -1,4 +1,7 @@
-window._rekwire = { base: '' };
+window._rekwire = {
+  base: '',
+  modules: {}
+};
 
 window.rekwire = function (name, path, dependencies) {
   var depsLoaded = $.Deferred().resolve(),
@@ -22,12 +25,12 @@ window.rekwire = function (name, path, dependencies) {
     path = undefined;
   }
 
-  module = _rekwire[name];
+  module = _rekwire.modules[name];
 
   if (!module) {
     path = path || _rekwire.base + name + '.js';
 
-    _rekwire[name] = {
+    _rekwire.modules[name] = {
       path: path,
       dependencies: dependencies || [],
       loading: false,

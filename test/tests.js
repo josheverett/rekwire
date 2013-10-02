@@ -20,31 +20,32 @@ rekwire('Z', ['X', 'Y']);
 test('Arguments test: rekwire(name)', function () {
   rekwire('a');
 
-  equal(typeof _rekwire.a, 'object', 'Module object created.');
-  equal(_rekwire.a.path, _rekwire.base + 'a.js', 'Path is correct.');
+  equal(typeof _rekwire.modules.a, 'object', 'Module object created.');
+  equal(_rekwire.modules.a.path, _rekwire.base + 'a.js', 'Path is correct.');
 });
 
 test('Arguments test: rekwire(name, path)', function () {
   rekwire('b', '/foo/bar/b.js');
 
-  equal(typeof _rekwire.b, 'object', 'Module object created.');
-  equal(_rekwire.b.path, '/foo/bar/b.js', 'Path is correct.');
+  equal(typeof _rekwire.modules.b, 'object', 'Module object created.');
+  equal(_rekwire.modules.b.path, '/foo/bar/b.js', 'Path is correct.');
 });
 
 test('Arguments test: rekwire(name, path, dependencies)', function () {
   rekwire('c', '/foo/bar/c.js', ['a', 'b']);
 
-  equal(typeof _rekwire.c, 'object', 'Module object created.');
-  equal(_rekwire.c.path, '/foo/bar/c.js', 'Path is correct.');
-  deepEqual(_rekwire.c.dependencies, ['a', 'b'], 'Dependencies are correct.');
+  equal(typeof _rekwire.modules.c, 'object', 'Module object created.');
+  equal(_rekwire.modules.c.path, '/foo/bar/c.js', 'Path is correct.');
+  deepEqual(_rekwire.modules.c.dependencies, ['a', 'b'],
+      'Dependencies are correct.');
 });
 
 test('Arguments test: rekwire(name, dependencies)', function () {
   rekwire('d', ['a', 'b', 'c']);
 
-  equal(typeof _rekwire.d, 'object', 'Module object created.');
-  equal(_rekwire.d.path, _rekwire.base + 'd.js', 'Path is correct.');
-  deepEqual(_rekwire.d.dependencies, ['a', 'b', 'c'],
+  equal(typeof _rekwire.modules.d, 'object', 'Module object created.');
+  equal(_rekwire.modules.d.path, _rekwire.base + 'd.js', 'Path is correct.');
+  deepEqual(_rekwire.modules.d.dependencies, ['a', 'b', 'c'],
       'Dependencies are correct.');
 });
 
@@ -55,9 +56,9 @@ test('Arguments test: rekwire({ ... })', function () {
     dependencies: ['a', 'b', 'c', 'd']
   });
 
-  equal(typeof _rekwire.e, 'object', 'Module object created.');
-  equal(_rekwire.e.path, '/foo/bar/e.js', 'Path is correct.');
-  deepEqual(_rekwire.e.dependencies, ['a', 'b', 'c', 'd'],
+  equal(typeof _rekwire.modules.e, 'object', 'Module object created.');
+  equal(_rekwire.modules.e.path, '/foo/bar/e.js', 'Path is correct.');
+  deepEqual(_rekwire.modules.e.dependencies, ['a', 'b', 'c', 'd'],
       'Dependencies are correct.');
 });
 
@@ -87,6 +88,16 @@ asyncTest('rekwire([module1, module2, ...moduleN])', function () {
     equal(foo, 'foo', 'Module "foo" loaded.');
     start();
   });
+});
+
+// TODO: mockjax test to ensure modules are loaded from localStorage.
+test('Loaded modules are in local storage.', function () {
+  var storage = JSON.parse(localStorage.getItem('rewkire'));
+
+  equal(typeof storage.derp, 'object', 'Module "derp" in storage.');
+  ok(storage.derp.content.length, 'string', 'Module "derp" has content.');
+  equal(typeof storage.foo, 'object', 'Module "foo" in storage.');
+  ok(storage.foo.content.length, 'string', 'Module "foo" has content.');
 });
 
 asyncTest('Modules are only loaded once.', function () {
