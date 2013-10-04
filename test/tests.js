@@ -14,8 +14,8 @@ rekwire('B');
 rekwire('C');
 rekwire('D', ['A', 'B', 'C']);
 rekwire('X', ['A']);
-rekwire('Y', ['D', 'X']);
-rekwire('Z', ['X', 'Y']);
+rekwire('Y', ['X']);
+rekwire('Z', ['D', 'Y']);
 
 test('Arguments test: rekwire(name)', function () {
   rekwire('a');
@@ -92,12 +92,11 @@ asyncTest('rekwire([module1, module2, ...moduleN])', function () {
 
 // TODO: mockjax test to ensure modules are loaded from localStorage.
 test('Loaded modules are in local storage.', function () {
-  var storage = JSON.parse(localStorage.getItem('rewkire'));
+  var lsDerp = localStorage.getItem('rekwire.derp'),
+      lsFoo = localStorage.getItem('rekwire.foo');
 
-  equal(typeof storage.derp, 'object', 'Module "derp" in storage.');
-  ok(storage.derp.content.length, 'string', 'Module "derp" has content.');
-  equal(typeof storage.foo, 'object', 'Module "foo" in storage.');
-  ok(storage.foo.content.length, 'string', 'Module "foo" has content.');
+  equal(typeof lsDerp, 'string', 'Module "derp" in storage.');
+  equal(typeof lsFoo, 'string', 'Module "foo" in storage.');
 });
 
 asyncTest('Modules are only loaded once.', function () {
@@ -123,7 +122,7 @@ asyncTest('Simple dependency tree loads OK.', function () {
   expect(1);
 
   rekwire('D').done(function () {
-    ok(true, 'Error will be thrown if this test fails.');
+    equal(typeof D, 'function', 'Module "D" loaded.');
     start();
   });
 });
@@ -132,7 +131,7 @@ asyncTest('Complex dependency tree loads OK.', function () {
   expect(1);
 
   rekwire('Z').done(function () {
-    ok(true, 'Error will be thrown if this test fails.');
+    equal(typeof Z, 'function', 'Module "Z" loaded.');
     start();
   });
 });

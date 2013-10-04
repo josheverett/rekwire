@@ -1,6 +1,18 @@
 window._rekwire = {
   base: '',
-  modules: {}
+  modules: {},
+  loadModule: function (module) {
+    return $.ajax({
+      url: module.path,
+      dataType: 'script',
+      cache: true
+    })
+    .done(function () {
+      module.loaded = true;
+      module.dfd.resolve(arguments);
+    })
+    .fail(module.dfd.reject);
+  }
 };
 
 window.rekwire = function (name, path, dependencies) {
@@ -31,6 +43,7 @@ window.rekwire = function (name, path, dependencies) {
     path = path || _rekwire.base + name + '.js';
 
     _rekwire.modules[name] = {
+      name: name,
       path: path,
       dependencies: dependencies || [],
       loading: false,
@@ -57,16 +70,7 @@ window.rekwire = function (name, path, dependencies) {
   }
 
   depsLoaded.done(function () {
-    $.ajax({
-      url: module.path,
-      dataType: 'script',
-      cache: true
-    })
-    .done(function () {
-      module.loaded = true;
-      module.dfd.resolve(arguments);
-    })
-    .fail(module.dfd.reject);
+    _rekwire.loadModule(module);
   });
 
   return module.dfd.promise();

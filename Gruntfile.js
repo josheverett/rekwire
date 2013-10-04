@@ -23,6 +23,8 @@ module.exports = function (grunt) {
         files: [
           { src: 'rekwire.js',
             dest: 'test/rekwire.js' },
+          { src: 'rekwire.localstorage.js',
+            dest: 'test/rekwire.localstorage.js' },
           { src: 'node_modules/qunitjs/qunit/qunit.css',
             dest: 'test/qunit/qunit.css' },
           { src: 'node_modules/qunitjs/qunit/qunit.js',
@@ -50,12 +52,12 @@ module.exports = function (grunt) {
 
     watch: {
       build: {
-        files: 'rekwire.js',
+        files: ['rekwire.js', 'rekwire.localstorage.js'],
         tasks: ['jshint', 'uglify', 'copy', 'qunit']
       },
       debug: {
-        files: 'rekwire.js',
-        tasks: ['jshint', 'uglify', 'copy']
+        files: ['rekwire.js', 'rekwire.localstorage.js'],
+        tasks: ['jshint', 'copy']
       }
     }
   });
