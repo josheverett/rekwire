@@ -22,7 +22,7 @@ Summary:
 
 The basic syntax to define a module is the following:
 
-  rekwire('module-name', 'path/to/module.js', ['module', 'dependencies']);
+    rekwire('module-name', 'path/to/module.js', ['module', 'dependencies']);
 
 #### Modules can also be defined using only their name.
 
