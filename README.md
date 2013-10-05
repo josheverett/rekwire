@@ -191,6 +191,11 @@ flag for your users indicating the build/version number of your release, and
 then simply call `_rekwire.clear()` when the build/version changes as part of
 your bootstrapping process.
 
+The localStorage plugin uses ajax to fetch the contents of JavaScript files. If
+the files for your modules are stored on another domain than the one serving
+your HTML (e.g. on a CDN), you must be sure to implement proper CORS headers for
+your JavaScript files.
+
 #### Options
 
 ##### Global Options
