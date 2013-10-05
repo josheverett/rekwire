@@ -83,7 +83,7 @@ function storeResponse (module, content, jqXhr) {
   var expires = module.expires || getHeaderExpires(jqXhr) || _rekwire.expires,
       manifest;
 
-  if (!expires) {
+  if (!expires || module.noStore) {
     deleteModule(module.name);
     return;
   }
