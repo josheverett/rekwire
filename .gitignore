@@ -3,3 +3,4 @@ node_modules/
 npm-debug.log
 test/qunit/
 test/rekwire.js
+test/rekwire.localstorage.js
