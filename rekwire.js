@@ -6,12 +6,7 @@ window._rekwire = {
       url: module.path,
       dataType: 'script',
       cache: true
-    })
-    .done(function () {
-      module.loaded = true;
-      module.dfd.resolve(arguments);
-    })
-    .fail(module.dfd.reject);
+    });
   }
 };
 
@@ -70,7 +65,13 @@ window.rekwire = function (name, path, dependencies) {
   }
 
   depsLoaded.done(function () {
-    _rekwire.loadModule(module);
+    _rekwire.loadModule(module)
+    .done(function () {
+      module.loading = false;
+      module.loaded = true;
+      module.dfd.resolve(arguments);
+    })
+    .fail(module.dfd.reject);
   });
 
   return module.dfd.promise();

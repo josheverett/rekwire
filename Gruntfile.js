@@ -4,7 +4,7 @@ module.exports = function (grunt) {
 
     jshint: {
       build: {
-        src: 'rekwire.js'
+        src: ['rekwire.js', 'rekwire.localstorage.js']
       }
     },
 
@@ -13,8 +13,12 @@ module.exports = function (grunt) {
         options: {
           banner: '/* rekwire :: Josh Everett :: MIT License */\n'
         },
-        src: 'rekwire.js',
-        dest: 'rekwire.min.js'
+        files: [
+          { src: 'rekwire.js',
+            dest: 'rekwire.min.js' },
+          { src: 'rekwire.localstorage.js',
+            dest: 'rekwire.localstorage.min.js' }
+        ]
       }
     },
 

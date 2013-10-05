@@ -1,6 +1,7 @@
 window.loadCount = 0;
 
 _rekwire.base = 'fixtures/';
+_rekwire.expires = Date.now() + 86400000; // One day.
 
 rekwire('derp');
 rekwire('foo');
@@ -90,13 +91,10 @@ asyncTest('rekwire([module1, module2, ...moduleN])', function () {
   });
 });
 
-// TODO: mockjax test to ensure modules are loaded from localStorage.
+// TODO: A bunch of localStorage tests.
 test('Loaded modules are in local storage.', function () {
-  var lsDerp = localStorage.getItem('rekwire.derp'),
-      lsFoo = localStorage.getItem('rekwire.foo');
-
-  equal(typeof lsDerp, 'string', 'Module "derp" in storage.');
-  equal(typeof lsFoo, 'string', 'Module "foo" in storage.');
+  ok(localStorage.getItem('rekwire.derp'), 'Module "derp" in storage.');
+  ok(localStorage.getItem('rekwire.foo'), 'Module "foo" in storage.');
 });
 
 asyncTest('Modules are only loaded once.', function () {
