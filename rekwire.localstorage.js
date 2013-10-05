@@ -121,9 +121,8 @@ _rekwire.clear = function (name) {
     return deleteModule(name);
   }
 
+  $.each(getManifest(), deleteModule);
   removeItem(MANIFEST);
-
-  return $.each(getManifest(), deleteModule);
 };
 
 _rekwire.loadModule = function (module) {
