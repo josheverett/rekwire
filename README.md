@@ -113,15 +113,16 @@ like this:
       // Do something interesting with `data`.
 
       $('.btn').click(function () {
-        var args = arguments;
+        var el = this,
+            args = arguments;
 
         rekwire('derp').done(function () {
-          derp.handleButtonClick.apply(this, args);
+          derp.handleButtonClick.apply(el, args);
         });
       });
     });
 
-The major benefit to this approach is that code that is only required under
+The major benefit to this approach is that any code that is only required under
 certain conditions (e.g. user clicks a button) is never loaded if those
 conditions are never met.
 
@@ -142,10 +143,11 @@ to the situation would look something like this:
     // Do something interesting with `data`.
 
     $('.btn').click(function () {
-      var args = arguments;
+      var el = this,
+          args = arguments;
 
       rekwire('derp').done(function () {
-        derp.handleButtonClick.apply(this, args);
+        derp.handleButtonClick.apply(el, args);
       });
     });
 
