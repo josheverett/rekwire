@@ -69,6 +69,9 @@ dependencies for those dependencies and so on, to make sure your modules load in
 the proper order. Only when all dependent modules have been loaded will the
 rekwired module load and resolve its `Deferred`.
 
+You can rekwire multiple modules at once by calling
+`rekwire(['module1', 'module2', ...'moduleN'])`.
+
 #### Choose Your Own Destiny
 
 There are two basic ways to leverage this behavior. Depending on your use case,
@@ -151,6 +154,18 @@ to the situation would look something like this:
       });
     });
 
+### Not AMD Out of the Box
+
+rekwire is essentially a file loader, treating files as dumb "modules" with a
+1:1 relationship. You could use rekwire in conjunction with an AMD module
+loader, with rekwire acting as a package manager for your modules.
+
+Alternatively, the `Deferred` returned by `rekwire()` calls is actually a
+`jqXhr` object that could be used to implement AMD loading. The first argument
+passed to `jqXhr.done()` callbacks is the text content of the loaded file, which
+could be `eval()`'d and passed to a callback via a wrapper function. A plugin to
+accomplish this is planned. :)
+
 --------------------------------------------------------------------------------
 
 ## localStorage Plugin
@@ -211,7 +226,7 @@ element that will be used as the append target for `script` tags.
 `decay` is the amount of time (in ms) a module can go unused by the user before
 being deleted from localStorage. Defaults to one week.
 
-`expires` is a default expiration date (Unix time in ms) to apply to files that
+`expires` is the default expiration date (Unix time in ms) to apply to files
 for which an expiration date was not found. Defaults to `null`.
 
 ##### Module-Level Options
